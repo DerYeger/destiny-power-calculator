@@ -20,5 +20,5 @@ object PersistencyController {
 
     fun load() = String(file.readBytes())
 
-    private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/defaults.json").readAllBytes()).apply { println(this) }
+    private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/defaults.json").readAllBytes())
 }
