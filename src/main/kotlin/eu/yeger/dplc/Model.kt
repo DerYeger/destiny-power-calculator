@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken
 import eu.yeger.kotlin.javafx.delegation
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
-import java.io.File
+import kotlin.math.ceil
 
 private const val BASE_POWER_LEVEL = 750
 
@@ -26,6 +26,9 @@ class Model {
     val powerLevelProperty = SimpleDoubleProperty()
     private var powerLevel by powerLevelProperty.delegation()
 
+    val missingPowerProperty = SimpleIntegerProperty()
+    private var missingPower by missingPowerProperty.delegation()
+
     init {
         slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) }
         weapons = slots.subList(0, 3)
@@ -36,6 +39,7 @@ class Model {
 
     private fun updatePowerLevel() {
         powerLevel = slots.map { it.power }.average()
+        missingPower = ceil(powerLevel).toInt() * slots.size - slots.map { it.power }.sum()
         save()
     }
 

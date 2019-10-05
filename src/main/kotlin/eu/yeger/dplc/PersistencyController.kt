@@ -4,7 +4,7 @@ import java.io.File
 
 object PersistencyController {
 
-    private val file = File("${System.getenv("AppData")}/Yeger/DPLC", "save.json")
+    private val file = File("${getAppDirectory()}/Yeger/DPLC", "save.json")
 
     init {
         if (!file.exists()) {
@@ -21,4 +21,10 @@ object PersistencyController {
     fun load() = String(file.readBytes())
 
     private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/defaults.json").readAllBytes())
+
+    private fun getAppDirectory() = when(System.getProperty("os.name")) {
+        else -> System.getenv("AppData")
+    }
+
+    private fun String.containsOther(s: String) = this.contains(s)
 }

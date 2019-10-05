@@ -37,6 +37,7 @@ class MainApp : Application() {
                         alignment = Pos.TOP_RIGHT
                         children(
                             label(powerLevelProperty.asString()),
+                            label(missingPowerProperty.asString()),
                             button("Reset") { setOnAction { reset() } }
                         )
                     }
