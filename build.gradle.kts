@@ -28,6 +28,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+
+    implementation("com.google.code.gson:gson:2.8.6")
     
     implementation("eu.yeger:kotlin.javafx:0.1.2")
 
