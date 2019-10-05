@@ -4,7 +4,7 @@ import java.io.File
 
 object PersistencyController {
 
-    private val file = File("${System.getenv("AppData")}/Yeger/dplc", ".json")
+    private val file = File("${System.getenv("AppData")}/Yeger/DPLC", "save.json")
 
     init {
         if (!file.exists()) {
@@ -20,5 +20,5 @@ object PersistencyController {
 
     fun load() = String(file.readBytes())
 
-    private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/slots.json").readAllBytes())
+    private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/defaults.json").readAllBytes()).apply { println(this) }
 }
