@@ -1,0 +1,15 @@
+* {
+    -fx-font-size: 18;
+}
+
+IntegerField {
+    -fx-pref-width: 4em;
+}
+
+.container {
+    -fx-padding: 1em;
+}
+
+.container > VBox {
+    -fx-padding: 0.5em;
+}

@@ -5,41 +5,33 @@ import com.google.gson.reflect.TypeToken
 import eu.yeger.kotlin.javafx.delegation
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
+import java.io.File
 
-private val BASE_POWER_LEVEL = 750
+private const val BASE_POWER_LEVEL = 750
 
-class Slot(slotData: SlotData) {
-    
-    val name = slotData.name
-    val powerProperty = SimpleIntegerProperty(slotData.power)
+class Slot(data: Pair<String, Int>) {
+    val name = data.first
+    val powerProperty = SimpleIntegerProperty(data.second)
     var power by powerProperty.delegation()
-
-    fun getData() = SlotData(name, power)
-}
-
-class SlotData(val name: String, val power: Int) {
-    constructor(name: String) : this(name, BASE_POWER_LEVEL)
 }
 
 class Model {
 
-    val gson = Gson()
-    
-    val weaponJson = "[{\"name\":\"Kinetic\",\"power\":666},{\"name\":\"Energy\",\"power\":666},{\"name\":\"Heavy\",\"power\":666}]"
-    val armorJson = "[{\"name\":\"Helmet\",\"power\":666},{\"name\":\"Gauntlets\",\"power\":666},{\"name\":\"Chest\",\"power\":666},{\"name\":\"Legs\",\"power\":666},{\"name\":\"Class\",\"power\":666}]"
+    private val gson = Gson()
 
-    val weapons = gson.fromJson<List<SlotData>>(weaponJson).map { Slot(it) }
+    private val slots: List<Slot>
+    val weapons: List<Slot>
+    val armor: List<Slot>
 
-    val armor = gson.fromJson<List<SlotData>>(armorJson).map { Slot(it) }
-
-    val slots = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
-
-    val powerLevelProperty = SimpleDoubleProperty(BASE_POWER_LEVEL.toDouble())
-    var powerLevel by powerLevelProperty.delegation()
+    val powerLevelProperty = SimpleDoubleProperty()
+    private var powerLevel by powerLevelProperty.delegation()
 
     init {
-        load()
+        slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) }
+        weapons = slots.subList(0, 3)
+        armor = slots.subList(3, slots.size)
         slots.forEach { it.powerProperty.addListener { _, _, _ -> updatePowerLevel() } }
+        updatePowerLevel()
     }
 
     private fun updatePowerLevel() {
@@ -48,13 +40,8 @@ class Model {
     }
 
     private fun save() {
-        val gson = Gson()
-        val json = gson.toJson(slots.map { it.toSlotData() })
-        println(json)
-    }
-
-    private fun load() {
-        weapons = gson.fromJson<List<SlotData>>(weaponJson).map { Slot(it) }
+        val json = gson.toJson(slots.map { it.name to it.power })
+        PersistencyController.save(json)
     }
 
     fun reset() {
@@ -62,4 +49,4 @@ class Model {
     }
 }
 
-inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
+inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson<T>(json, object: TypeToken<T>() {}.type)

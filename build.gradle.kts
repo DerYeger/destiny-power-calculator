@@ -1,12 +1,17 @@
 plugins {
-    application
     java
+    application
     kotlin("jvm") version "1.3.50"
     id("org.openjfx.javafxplugin") version "0.0.8"
+    id("com.github.johnrengelman.shadow") version "5.1.0"
 }
 
 group = "eu.yeger"
 version = "1.0-SNAPSHOT"
+
+application {
+    mainClassName = "eu.yeger.dplc.AppLauncher"
+}
 
 val javaVersion = JavaVersion.VERSION_12
 val junit5Version = "5.5.2"

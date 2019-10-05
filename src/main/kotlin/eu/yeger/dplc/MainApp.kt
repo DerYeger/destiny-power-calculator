@@ -2,11 +2,8 @@ package eu.yeger.dplc
 
 import eu.yeger.kotlin.javafx.*
 import javafx.application.Application
+import javafx.geometry.Pos
 import javafx.stage.Stage
-
-fun main() {
-    Application.launch(MainApp::class.java)
-}
 
 class MainApp : Application() {
 
@@ -17,6 +14,7 @@ class MainApp : Application() {
     override fun start(primaryStage: Stage) {
         primaryStage.scene = buildScene()
         primaryStage.apply {
+            title = "Power Calculator"
             sizeToScene()
             isResizable = false
             show()
@@ -26,6 +24,8 @@ class MainApp : Application() {
     private fun buildScene() = with(model) {
         scene {
             hBox {
+                styleClasses("container")
+                styleSheets("main.css")
                 children(
                     vBox {
                         children(*(model.weapons.map { pair -> slot(pair) }.toTypedArray()))
@@ -34,6 +34,7 @@ class MainApp : Application() {
                         children(*(model.armor.map { pair -> slot(pair) }.toTypedArray()))
                     },
                     vBox {
+                        alignment = Pos.TOP_RIGHT
                         children(
                             label(powerLevelProperty.asString()),
                             button("Reset") { setOnAction { reset() } }
@@ -48,7 +49,9 @@ class MainApp : Application() {
         vBox {
             child { label(slot.name) }
             child {
-                NumberField(slot.powerProperty).asSingletonFragment()
+                IntegerField().apply {
+                    valueProperty.bindBidirectional(slot.powerProperty)
+                }.asSingletonFragment()
             }
         }
 }
