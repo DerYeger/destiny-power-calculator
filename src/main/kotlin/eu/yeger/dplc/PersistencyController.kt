@@ -25,6 +25,4 @@ object PersistencyController {
     private fun getAppDirectory() = when(System.getProperty("os.name")) {
         else -> System.getenv("AppData")
     }
-
-    private fun String.containsOther(s: String) = this.contains(s)
 }

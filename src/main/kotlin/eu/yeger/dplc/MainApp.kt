@@ -36,9 +36,8 @@ class MainApp : Application() {
                     vBox {
                         alignment = Pos.TOP_RIGHT
                         children(
-                            label(powerLevelProperty.asString()),
-                            label(missingPowerProperty.asString()),
-                            button("Reset") { setOnAction { reset() } }
+                            label(powerLevelProperty.asString("%4.2f")),
+                            label(missingPowerProperty.asString())
                         )
                     }
                 )
@@ -51,6 +50,7 @@ class MainApp : Application() {
             child { label(slot.name) }
             child {
                 IntegerField().apply {
+                    alignment = Pos.CENTER
                     valueProperty.bindBidirectional(slot.powerProperty)
                 }.asSingletonFragment()
             }

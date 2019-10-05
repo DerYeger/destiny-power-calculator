@@ -6,6 +6,7 @@ import eu.yeger.kotlin.javafx.delegation
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
 import kotlin.math.ceil
+import kotlin.math.floor
 
 private const val BASE_POWER_LEVEL = 750
 
@@ -39,7 +40,10 @@ class Model {
 
     private fun updatePowerLevel() {
         powerLevel = slots.map { it.power }.average()
-        missingPower = ceil(powerLevel).toInt() * slots.size - slots.map { it.power }.sum()
+        missingPower = if (powerLevel.isWholeNumber)
+            slots.size
+        else
+            ceil(powerLevel).toInt() * slots.size - slots.map { it.power }.sum()
         save()
     }
 
@@ -47,10 +51,9 @@ class Model {
         val json = gson.toJson(slots.map { it.name to it.power })
         PersistencyController.save(json)
     }
-
-    fun reset() {
-        slots.forEach { it.power = BASE_POWER_LEVEL }
-    }
 }
+
+private val Double.isWholeNumber
+        get() = ceil(this) == floor(this)
 
 inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
