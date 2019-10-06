@@ -1,6 +1,6 @@
 * {
     -fx-font-size: 18;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #ccc;
 }
 
 IntegerField {
@@ -16,4 +16,8 @@ IntegerField {
 .container > VBox {
     -fx-padding: 1em;
     -fx-spacing: 0.5em;
+}
+
+.highlight {
+    -fx-text-fill: orange;
 }
