@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.control.TextField
 import javafx.util.converter.NumberStringConverter
 
-class IntegerField : TextField() {
+class NumberField : TextField() {
 
     val valueProperty = SimpleIntegerProperty(0)
     var value by valueProperty.delegation()

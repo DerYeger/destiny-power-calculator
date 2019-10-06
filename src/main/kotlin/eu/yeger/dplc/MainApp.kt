@@ -2,6 +2,8 @@ package eu.yeger.dplc
 
 import eu.yeger.kotlin.javafx.*
 import javafx.application.Application
+import javafx.beans.property.IntegerProperty
+import javafx.beans.property.Property
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
 import javafx.scene.Parent
@@ -61,13 +63,13 @@ class MainApp : Application() {
 
     private fun slot(slot: Slot) =
         vBox {
+            alignment = Pos.CENTER
             bindStyleClass(slot.stateProperty)
             child { label(slot.name) }
             child {
-                IntegerField().apply {
+                numberField(slot.powerProperty) {
                     alignment = Pos.CENTER
-                    valueProperty.bindBidirectional(slot.powerProperty)
-                }.asSingletonFragment()
+                }
             }
         }
 }
@@ -77,5 +79,12 @@ fun Parent.bindStyleClass(observable: ObservableValue<String?>) {
     observable.addListener { _, oldValue, newValue ->
         styleClass.remove(oldValue)
         newValue?.let { styleClass.add(it) }
+    }
+}
+
+fun numberField(observable: IntegerProperty, init: NumberField.() -> Unit) = Fragment {
+    NumberField().apply {
+        valueProperty.bindBidirectional(observable)
+        init()
     }
 }
