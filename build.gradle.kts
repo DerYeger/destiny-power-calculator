@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     java
     application
@@ -54,5 +56,9 @@ tasks {
 
     compileTestKotlin {
         kotlinOptions.jvmTarget = javaVersion.toString()
+    }
+
+    withType<ShadowJar> {
+        archiveName = "dplc.jar"
     }
 }
