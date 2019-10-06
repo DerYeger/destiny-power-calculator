@@ -59,6 +59,6 @@ tasks {
     }
 
     withType<ShadowJar> {
-        archiveName = "dplc.jar"
+        archiveFileName.set("dplc.jar")
     }
 }
