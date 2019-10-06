@@ -37,9 +37,6 @@ class Model {
     val infoProperty = SimpleStringProperty(null)
     var info: String? by infoProperty.delegation()
 
-    val infoStateProperty = SimpleStringProperty(null)
-    var infoState: String? by infoStateProperty.delegation()
-
     init {
         slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) }
         weapons = slots.subList(0, 3)
@@ -74,8 +71,7 @@ class Model {
                 floor(powerLevel) - it.power >= missingPower -> {
                     if (it.power == lowestPower) "warning" else "note"
                 }
-                it.power > powerLevel -> "good"
-                it.power == powerLevel.toInt() -> null
+                it.power >= powerLevel -> "good"
                 else -> null
             }
         }
@@ -83,14 +79,10 @@ class Model {
 
     private fun updateInfo() {
         info = when {
-            slots.any { it.state == "note" } || missingPower > 4 -> {
-                infoState = "note";
-                "Do not use powerful rewards"
-            }
+            slots.any { it.state in listOf("note", "warning") } -> "Upgrade any marked item"
+            missingPower > 4 -> "Do not use powerful rewards"
             else -> null
         }
-        println(info)
-        println(infoState)
     }
 
     private fun save() {

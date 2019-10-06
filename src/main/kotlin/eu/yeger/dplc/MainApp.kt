@@ -5,7 +5,6 @@ import javafx.application.Application
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
 import javafx.scene.Parent
-import javafx.scene.text.TextAlignment
 import javafx.stage.Stage
 
 class MainApp : Application() {
@@ -27,6 +26,7 @@ class MainApp : Application() {
     private fun buildScene() = with(model) {
         scene {
             vBox {
+                alignment = Pos.CENTER
                 styleClasses("container")
                 styleSheets("main.css")
                 child {
@@ -41,8 +41,8 @@ class MainApp : Application() {
                             vBox {
                                 alignment = Pos.TOP_RIGHT
                                 children(
-                                    label(powerLevelProperty.asString("Power: %4.2f")),
-                                    label(missingPowerProperty.asString("Missing: %d"))
+                                    label(powerLevelProperty.asString("%4.0f Power")),
+                                    label(missingPowerProperty.asString("%d points required"))
                                 )
                             }
                         )
@@ -50,8 +50,7 @@ class MainApp : Application() {
                 }
                 child {
                     label(infoProperty) {
-                        bindStyleClass(infoStateProperty)
-                        textAlignment = TextAlignment.CENTER
+                        styleClasses("note")
                     }
                 }
             }
