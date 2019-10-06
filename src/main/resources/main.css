@@ -18,6 +18,6 @@ IntegerField {
     -fx-spacing: 0.5em;
 }
 
-.highlight {
+.warning {
     -fx-text-fill: orange;
 }

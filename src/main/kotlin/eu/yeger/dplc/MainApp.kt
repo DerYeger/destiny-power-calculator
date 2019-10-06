@@ -40,7 +40,7 @@ class MainApp : Application() {
                             label(missingPowerProperty.asString("Missing: %d")),
                             label("Do not use powerful drops") {
                                 bindVisible(model.warningProperty)
-                                styleClasses("highlight")
+                                styleClasses("warning")
                             }
                         )
                     }
@@ -51,11 +51,11 @@ class MainApp : Application() {
 
     private fun slot(slot: Slot) =
         vBox {
-            slot.markedProperty.addListener { _, _, newValue ->
+            slot.warningProperty.addListener { _, _, newValue ->
                 if (newValue) {
-                    children.forEach { it.styleClass.add("highlight") }
+                    children.forEach { it.styleClass.add("warning") }
                 } else {
-                    children.forEach { it.styleClass.remove("highlight") }
+                    children.forEach { it.styleClass.remove("warning") }
                 }
             }
             child { label(slot.name) }

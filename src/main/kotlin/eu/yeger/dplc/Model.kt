@@ -6,7 +6,6 @@ import eu.yeger.kotlin.javafx.delegation
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleStringProperty
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -16,8 +15,8 @@ class Slot(data: Pair<String, Int>) {
     val powerProperty = SimpleIntegerProperty(data.second)
     var power by powerProperty.delegation()
 
-    val markedProperty = SimpleBooleanProperty(false)
-    var marked by markedProperty.delegation()
+    val warningProperty = SimpleBooleanProperty(false)
+    var warning by warningProperty.delegation()
 }
 
 class Model {
@@ -36,9 +35,6 @@ class Model {
 
     val warningProperty = SimpleBooleanProperty(false)
     var warning by warningProperty.delegation()
-
-    val infoProperty = SimpleStringProperty()
-    var info by infoProperty.delegation()
 
     init {
         slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) }
@@ -60,16 +56,11 @@ class Model {
     }
 
     private fun updateHighlighting() {
-        slots.forEach { it.marked = floor(powerLevel) - it.power >= missingPower }
+        slots.forEach { it.warning = floor(powerLevel) - it.power >= missingPower }
     }
 
     private fun updateWarning() {
-        info = when {
-            missingPower > 4 -> "Do not use powerful drops"
-            missingPower > 3 -> "Do not use tier 1 powerful drops"
-            else -> ""
-        }
-        warning = info.isNotBlank()
+        warning = slots.any { it.warning } || missingPower > 4
     }
 
     private fun save() {
@@ -79,6 +70,6 @@ class Model {
 }
 
 private val Double.isWholeNumber
-        get() = ceil(this) == floor(this)
+    get() = ceil(this) == floor(this)
 
-inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
+inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson<T>(json, object : TypeToken<T>() {}.type)
