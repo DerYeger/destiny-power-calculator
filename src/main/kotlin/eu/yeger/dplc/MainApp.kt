@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
 import javafx.scene.Parent
 import javafx.stage.Stage
+import javafx.stage.StageStyle
 
 class MainApp : Application() {
 
@@ -17,6 +18,7 @@ class MainApp : Application() {
         primaryStage.scene = buildScene()
         primaryStage.apply {
             title = "Power Calculator"
+            initStyle(StageStyle.UTILITY)
             sizeToScene()
             isResizable = false
             show()

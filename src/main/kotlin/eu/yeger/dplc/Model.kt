@@ -79,8 +79,8 @@ class Model {
 
     private fun updateInfo() {
         info = when {
-            slots.any { it.state in listOf("note", "warning") } -> "Upgrade any marked item"
-            missingPower > 4 -> "Do not use powerful rewards"
+            slots.any { it.state in listOf("note", "warning") } -> "Tip: Upgrade any marked (orange or red) item"
+            missingPower > 4 -> "Tip: Don't use a powerful reward right now"
             else -> null
         }
     }
