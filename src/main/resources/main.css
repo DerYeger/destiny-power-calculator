@@ -1,23 +1,35 @@
 * {
     -fx-font-size: 18;
-    -fx-text-fill: #ccc;
+    -fx-text-fill: #ddd;
 }
 
 IntegerField {
-    -fx-background-color: #424242;
+    -fx-background-color: #333;
+    -fx-focus-traversable: false;
     -fx-pref-width: 4em;
 }
 
 .container {
     -fx-padding: 1em;
-    -fx-background-color: #222222;
+    -fx-background-color: #222;
 }
 
-.container > VBox {
+.container > HBox > VBox {
     -fx-padding: 1em;
     -fx-spacing: 0.5em;
 }
 
-.warning {
+.good,
+.good * {
+    -fx-text-fill: lightgreen;
+}
+
+.note,
+.note * {
     -fx-text-fill: orange;
+}
+
+.warning,
+.warning * {
+    -fx-text-fill: #ff4444;
 }

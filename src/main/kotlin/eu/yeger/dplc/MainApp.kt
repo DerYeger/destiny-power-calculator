@@ -2,7 +2,10 @@ package eu.yeger.dplc
 
 import eu.yeger.kotlin.javafx.*
 import javafx.application.Application
+import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
+import javafx.scene.Parent
+import javafx.scene.text.TextAlignment
 import javafx.stage.Stage
 
 class MainApp : Application() {
@@ -23,41 +26,41 @@ class MainApp : Application() {
 
     private fun buildScene() = with(model) {
         scene {
-            hBox {
+            vBox {
                 styleClasses("container")
                 styleSheets("main.css")
-                children(
-                    vBox {
-                        children(*(model.weapons.map { pair -> slot(pair) }.toTypedArray()))
-                    },
-                    vBox {
-                        children(*(model.armor.map { pair -> slot(pair) }.toTypedArray()))
-                    },
-                    vBox {
-                        alignment = Pos.TOP_RIGHT
+                child {
+                    hBox {
                         children(
-                            label(powerLevelProperty.asString("Power: %4.2f")),
-                            label(missingPowerProperty.asString("Missing: %d")),
-                            label("Do not use powerful drops") {
-                                bindVisible(model.warningProperty)
-                                styleClasses("warning")
+                            vBox {
+                                children(*(weapons.map { pair -> slot(pair) }.toTypedArray()))
+                            },
+                            vBox {
+                                children(*(armor.map { pair -> slot(pair) }.toTypedArray()))
+                            },
+                            vBox {
+                                alignment = Pos.TOP_RIGHT
+                                children(
+                                    label(powerLevelProperty.asString("Power: %4.2f")),
+                                    label(missingPowerProperty.asString("Missing: %d"))
+                                )
                             }
                         )
                     }
-                )
+                }
+                child {
+                    label(infoProperty) {
+                        bindStyleClass(infoStateProperty)
+                        textAlignment = TextAlignment.CENTER
+                    }
+                }
             }
         }
     }
 
     private fun slot(slot: Slot) =
         vBox {
-            slot.warningProperty.addListener { _, _, newValue ->
-                if (newValue) {
-                    children.forEach { it.styleClass.add("warning") }
-                } else {
-                    children.forEach { it.styleClass.remove("warning") }
-                }
-            }
+            bindStyleClass(slot.stateProperty)
             child { label(slot.name) }
             child {
                 IntegerField().apply {
@@ -66,4 +69,12 @@ class MainApp : Application() {
                 }.asSingletonFragment()
             }
         }
+}
+
+fun Parent.bindStyleClass(observable: ObservableValue<String?>) {
+    observable.value?.let { styleClass.add(it) }
+    observable.addListener { _, oldValue, newValue ->
+        styleClass.remove(oldValue)
+        newValue?.let { styleClass.add(it) }
+    }
 }

@@ -3,9 +3,10 @@ package eu.yeger.dplc
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import eu.yeger.kotlin.javafx.delegation
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleStringProperty
+import kotlinx.coroutines.*
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -15,8 +16,8 @@ class Slot(data: Pair<String, Int>) {
     val powerProperty = SimpleIntegerProperty(data.second)
     var power by powerProperty.delegation()
 
-    val warningProperty = SimpleBooleanProperty(false)
-    var warning by warningProperty.delegation()
+    val stateProperty = SimpleStringProperty(null)
+    var state: String? by stateProperty.delegation()
 }
 
 class Model {
@@ -33,8 +34,11 @@ class Model {
     val missingPowerProperty = SimpleIntegerProperty()
     private var missingPower by missingPowerProperty.delegation()
 
-    val warningProperty = SimpleBooleanProperty(false)
-    var warning by warningProperty.delegation()
+    val infoProperty = SimpleStringProperty(null)
+    var info: String? by infoProperty.delegation()
+
+    val infoStateProperty = SimpleStringProperty(null)
+    var infoState: String? by infoStateProperty.delegation()
 
     init {
         slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) }
@@ -45,22 +49,48 @@ class Model {
     }
 
     private fun update() {
+        updatePowerLevel()
+        updateMissingPower()
+        updateSlotStates()
+        updateInfo()
+        GlobalScope.launch(Dispatchers.IO) { save() }
+    }
+
+    private fun updatePowerLevel() {
         powerLevel = slots.map { it.power }.average()
+    }
+
+    private fun updateMissingPower() {
         missingPower = if (powerLevel.isWholeNumber)
             slots.size
         else
             ceil(powerLevel).toInt() * slots.size - slots.map { it.power }.sum()
-        updateHighlighting()
-        updateWarning()
-        save()
     }
 
-    private fun updateHighlighting() {
-        slots.forEach { it.warning = floor(powerLevel) - it.power >= missingPower }
+    private fun updateSlotStates() {
+        val lowestPower = slots.map { it.power }.min() ?: 0
+        slots.forEach {
+            it.state = when {
+                floor(powerLevel) - it.power >= missingPower -> {
+                    if (it.power == lowestPower) "warning" else "note"
+                }
+                it.power > powerLevel -> "good"
+                it.power == powerLevel.toInt() -> null
+                else -> null
+            }
+        }
     }
 
-    private fun updateWarning() {
-        warning = slots.any { it.warning } || missingPower > 4
+    private fun updateInfo() {
+        info = when {
+            slots.any { it.state == "note" } || missingPower > 4 -> {
+                infoState = "note";
+                "Do not use powerful rewards"
+            }
+            else -> null
+        }
+        println(info)
+        println(infoState)
     }
 
     private fun save() {
