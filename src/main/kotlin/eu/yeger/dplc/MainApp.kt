@@ -3,7 +3,6 @@ package eu.yeger.dplc
 import eu.yeger.kotlin.javafx.*
 import javafx.application.Application
 import javafx.beans.property.IntegerProperty
-import javafx.beans.property.Property
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
 import javafx.scene.Parent

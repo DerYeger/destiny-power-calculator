@@ -12,12 +12,11 @@ class NumberField : TextField() {
     var value by valueProperty.delegation()
 
     var maxValue = 1500
-    var minValue = 0
 
     init {
         valueProperty.addListener { _, _, _ ->
-            if (value !in minValue..maxValue) {
-                value = value.coerceIn(minValue..maxValue)
+            if (value !in 0..maxValue) {
+                value = value.coerceIn(0..maxValue)
                 textProperty().value = value.toString()
             }
         }
