@@ -45,7 +45,7 @@ class MainApp : Application() {
                             vBox {
                                 alignment = Pos.TOP_RIGHT
                                 children(
-                                    label(powerLevelProperty.asString("%4.0f Power")),
+                                    label(powerLevelProperty.asString("%d Power")),
                                     label(missingPowerProperty.asString("%d points required"))
                                 )
                             }

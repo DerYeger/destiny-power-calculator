@@ -28,7 +28,7 @@ class Model {
     val weapons: List<Slot>
     val armor: List<Slot>
 
-    val powerLevelProperty = SimpleDoubleProperty()
+    val powerLevelProperty = SimpleIntegerProperty()
     private var powerLevel by powerLevelProperty.delegation()
 
     val missingPowerProperty = SimpleIntegerProperty()
@@ -54,24 +54,21 @@ class Model {
     }
 
     private fun updatePowerLevel() {
-        powerLevel = slots.map { it.power }.average()
+        powerLevel = slots.map { it.power }.average().toInt()
     }
 
     private fun updateMissingPower() {
-        missingPower = if (powerLevel.isWholeNumber)
-            slots.size
-        else
-            ceil(powerLevel).toInt() * slots.size - slots.map { it.power }.sum()
+        missingPower = (powerLevel + 1) * slots.size - slots.sumBy { it.power }
     }
 
     private fun updateSlotStates() {
         val lowestPower = slots.map { it.power }.min() ?: -1
         slots.forEach {
             it.state = when {
-                floor(powerLevel) - it.power >= missingPower -> {
+                powerLevel - it.power >= missingPower -> {
                     if (it.power == lowestPower) "warning" else "note"
                 }
-                it.power >= powerLevel.toInt() -> "good"
+                it.power >= powerLevel -> "good"
                 else -> null
             }
         }
