@@ -3,12 +3,8 @@ package eu.yeger.dplc
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import eu.yeger.kotlin.javafx.delegation
-import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
-import kotlinx.coroutines.*
-import kotlin.math.ceil
-import kotlin.math.floor
 
 class Slot(data: Pair<String, Int>) {
     val name = data.first

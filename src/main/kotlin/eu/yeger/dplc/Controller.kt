@@ -22,19 +22,19 @@ class Controller(private val model: Model) {
     }
 
     private fun updatePowerLevel() {
-        with (model) {
+        with(model) {
             powerLevel = slots.map { it.power }.average().toInt()
         }
     }
 
     private fun updateMissingPower() {
-        with (model) {
+        with(model) {
             missingPower = (powerLevel + 1) * slots.size - slots.sumBy { it.power }
         }
     }
 
     private fun updateSlotStates() {
-        with (model) {
+        with(model) {
             val lowestPower = slots.map { it.power }.min() ?: -1
             slots.forEach {
                 it.state = when {
@@ -49,7 +49,7 @@ class Controller(private val model: Model) {
     }
 
     private fun updateInfo() {
-        with (model) {
+        with(model) {
             info = when {
                 slots.any { it.state in listOf("note", "warning") } -> "Tip: Upgrade any marked (orange or red) item"
                 missingPower > 4 -> "Tip: Don't use a powerful reward right now"
