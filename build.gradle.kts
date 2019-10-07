@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     java
     application
@@ -38,7 +36,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2")
 
     implementation("com.google.code.gson:gson:2.8.6")
-    
+
     implementation("eu.yeger:kotlin.javafx:0.1.2")
 
     runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:win")
@@ -58,7 +56,25 @@ tasks {
         kotlinOptions.jvmTarget = javaVersion.toString()
     }
 
-    withType<ShadowJar> {
+    shadowJar {
         archiveFileName.set("dplc.jar")
+    }
+
+    val deployCopy = create("deployCopy") {
+        group = "distribution"
+        dependsOn(shadowJar)
+        doFirst {
+            copy {
+                from("build/libs", "src/scripts")
+                into("build/tmp/deploy")
+            }
+        }
+    }
+
+    create<Zip>("deployZip") {
+        group = "distribution"
+        dependsOn(deployCopy)
+        archiveFileName.set("dplc.zip")
+        from("build/tmp/deploy")
     }
 }
