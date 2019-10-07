@@ -24,15 +24,15 @@ class Model {
 
     private val gson = Gson()
 
-    private val slots: List<Slot>
+    val slots: List<Slot>
     val weapons: List<Slot>
     val armor: List<Slot>
 
     val powerLevelProperty = SimpleIntegerProperty()
-    private var powerLevel by powerLevelProperty.delegation()
+    var powerLevel by powerLevelProperty.delegation()
 
     val missingPowerProperty = SimpleIntegerProperty()
-    private var missingPower by missingPowerProperty.delegation()
+    var missingPower by missingPowerProperty.delegation()
 
     val infoProperty = SimpleStringProperty(null)
     var info: String? by infoProperty.delegation()
@@ -41,54 +41,12 @@ class Model {
         slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) }
         weapons = slots.subList(0, 3)
         armor = slots.subList(3, slots.size)
-        slots.forEach { it.powerProperty.addListener { _, _, _ -> update() } }
-        update()
     }
 
-    private fun update() {
-        updatePowerLevel()
-        updateMissingPower()
-        updateSlotStates()
-        updateInfo()
-        GlobalScope.launch(Dispatchers.IO) { save() }
-    }
-
-    private fun updatePowerLevel() {
-        powerLevel = slots.map { it.power }.average().toInt()
-    }
-
-    private fun updateMissingPower() {
-        missingPower = (powerLevel + 1) * slots.size - slots.sumBy { it.power }
-    }
-
-    private fun updateSlotStates() {
-        val lowestPower = slots.map { it.power }.min() ?: -1
-        slots.forEach {
-            it.state = when {
-                powerLevel - it.power >= missingPower -> {
-                    if (it.power == lowestPower) "warning" else "note"
-                }
-                it.power >= powerLevel -> "good"
-                else -> null
-            }
-        }
-    }
-
-    private fun updateInfo() {
-        info = when {
-            slots.any { it.state in listOf("note", "warning") } -> "Tip: Upgrade any marked (orange or red) item"
-            missingPower > 4 -> "Tip: Don't use a powerful reward right now"
-            else -> null
-        }
-    }
-
-    private fun save() {
+    fun save() {
         val json = gson.toJson(slots.map { it.name to it.power })
         PersistencyController.save(json)
     }
 }
-
-private val Double.isWholeNumber
-    get() = ceil(this) == floor(this)
 
 inline fun <reified T> Gson.fromJson(json: String): T = this.fromJson<T>(json, object : TypeToken<T>() {}.type)

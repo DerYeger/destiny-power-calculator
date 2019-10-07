@@ -11,9 +11,9 @@ import javafx.stage.StageStyle
 
 class MainApp : Application() {
 
-    private val model by lazy {
-        Model()
-    }
+    private val model = Model()
+
+    private val controller = Controller(model)
 
     override fun start(primaryStage: Stage) {
         primaryStage.scene = buildScene()
