@@ -23,6 +23,6 @@ object PersistencyController {
     private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/defaults.json").readAllBytes())
 
     private fun getAppDirectory() = when(System.getProperty("os.name")) {
-        else -> System.getenv("AppData")
+        else -> File(PersistencyController::class.java.protectionDomain.codeSource.location.toURI()).parentFile
     }
 }

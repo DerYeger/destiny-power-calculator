@@ -25,7 +25,7 @@ java {
 
 javafx {
     version = javaVersion.toString()
-    modules = listOf("javafx.controls")
+    modules("javafx.controls")
 }
 
 repositories {
