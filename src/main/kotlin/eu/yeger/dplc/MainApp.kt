@@ -5,7 +5,10 @@ import javafx.application.Application
 import javafx.beans.property.IntegerProperty
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.Parent
+import javafx.scene.control.Tab
+import javafx.scene.control.TabPane
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 
@@ -27,35 +30,59 @@ class MainApp : Application() {
         }
     }
 
-    private fun buildScene() = with(model) {
-        scene {
-            vBox {
-                alignment = Pos.CENTER
-                styleClasses("container")
-                styleSheets("main.css")
-                child {
-                    hBox {
-                        children(
-                            vBox {
-                                children(*(weapons.map { pair -> slot(pair) }.toTypedArray()))
-                            },
-                            vBox {
-                                children(*(armor.map { pair -> slot(pair) }.toTypedArray()))
-                            },
-                            vBox {
-                                alignment = Pos.TOP_RIGHT
-                                children(
-                                    label(powerLevelProperty.asString("%d Power")),
-                                    label(missingPowerProperty.asString("%d points required"))
-                                )
-                            }
-                        )
-                    }
+    private fun buildScene() = scene {
+        tabPane {
+            tab {
+                isClosable = false
+                text = "Hunter"
+                content {
+                    buildTab()
                 }
-                child {
-                    label(infoProperty) {
-                        styleClasses("note")
-                    }
+            }
+            tab {
+                isClosable = false
+                text = "Titan"
+                content {
+                    buildTab()
+                }
+            }
+            tab {
+                isClosable = false
+                text = "Warlock"
+                content {
+                    buildTab()
+                }
+            }
+        }
+    }
+
+    private fun buildTab() = with(model) {
+        vBox {
+            alignment = Pos.CENTER
+            styleClasses("container")
+            styleSheets("main.css")
+            child {
+                hBox {
+                    children(
+                        vBox {
+                            children(*(weapons.map { pair -> slot(pair) }.toTypedArray()))
+                        },
+                        vBox {
+                            children(*(armor.map { pair -> slot(pair) }.toTypedArray()))
+                        },
+                        vBox {
+                            alignment = Pos.TOP_RIGHT
+                            children(
+                                label(powerLevelProperty.asString("%d Power")),
+                                label(missingPowerProperty.asString("%d points required"))
+                            )
+                        }
+                    )
+                }
+            }
+            child {
+                label(infoProperty) {
+                    styleClasses("note")
                 }
             }
         }
@@ -82,9 +109,21 @@ fun Parent.bindStyleClass(observable: ObservableValue<String?>) {
     }
 }
 
-fun numberField(observable: IntegerProperty, init: NumberField.() -> Unit) = Fragment {
+fun numberField(observable: IntegerProperty, init: @FXMarker NumberField.() -> Unit) = Fragment {
     NumberField().apply {
         valueProperty.bindBidirectional(observable)
         init()
     }
+}
+
+fun tabPane(init: @FXMarker TabPane.() -> Unit) = Fragment {
+    TabPane().apply(init)
+}
+
+fun TabPane.tab(init: @FXMarker Tab.() -> Unit) {
+    tabs += Tab().apply(init)
+}
+
+fun <T : Node> Tab.content(block: @FXMarker Child.() -> Fragment<T>) {
+    content = block(Child).instance()
 }

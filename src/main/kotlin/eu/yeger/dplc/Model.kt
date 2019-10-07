@@ -34,7 +34,7 @@ class Model {
     var info: String? by infoProperty.delegation()
 
     init {
-        slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) }
+        slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) } //statt liste von paaren -> listen von listen von paaren
         weapons = slots.subList(0, 3)
         armor = slots.subList(3, slots.size)
     }
