@@ -65,13 +65,13 @@ class Model {
     }
 
     private fun updateSlotStates() {
-        val lowestPower = slots.map { it.power }.min() ?: 0
+        val lowestPower = slots.map { it.power }.min() ?: -1
         slots.forEach {
             it.state = when {
                 floor(powerLevel) - it.power >= missingPower -> {
                     if (it.power == lowestPower) "warning" else "note"
                 }
-                it.power >= powerLevel -> "good"
+                it.power >= powerLevel.toInt() -> "good"
                 else -> null
             }
         }

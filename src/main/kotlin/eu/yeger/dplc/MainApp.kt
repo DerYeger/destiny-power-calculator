@@ -20,6 +20,7 @@ class MainApp : Application() {
         primaryStage.apply {
             title = "Power Calculator"
             initStyle(StageStyle.UTILITY)
+            isAlwaysOnTop = true
             sizeToScene()
             isResizable = false
             show()
