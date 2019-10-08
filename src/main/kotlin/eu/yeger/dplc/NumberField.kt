@@ -11,7 +11,10 @@ class NumberField : TextField() {
     val valueProperty = SimpleIntegerProperty(0)
     var value by valueProperty.delegation()
 
-    var maxValue = 9999
+    var maxValue = Int.MAX_VALUE
+        set(value) {
+            field = value.coerceAtLeast(0)
+        }
 
     init {
         valueProperty.addListener { _, _, _ ->

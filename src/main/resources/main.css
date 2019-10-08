@@ -1,35 +1,80 @@
 * {
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: transparent;
     -fx-font-size: 18;
     -fx-text-fill: #ddd;
 }
 
-NumberField {
-    -fx-background-color: #333;
-    -fx-focus-traversable: false;
-    -fx-pref-width: 4em;
+/* ------------------------------- */
+/* ----- TabPane and related ----- */
+/* ------------------------------- */
+
+.tab-pane {
+    -fx-alignment: center;
+    -fx-padding: 1em;
 }
 
-.container {
-    -fx-padding: 1em;
+.tab-pane,
+.tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: #222;
 }
 
-.container > HBox > VBox {
+.tab-pane .tab-header-area {
+    -fx-alignment: center;
+    -fx-padding: 0 50 0 50;
+}
+
+.tab {
+    -fx-background-color: #222;
+    -fx-border-color: #ddd;
+    -fx-border-width: 0;
+    -fx-focus-traversable: false;
+}
+
+.tab:selected {
+    -fx-border-width: 0 0 2 0;
+}
+
+/* ------------------------- */
+/* ----- Other layouts ----- */
+/* ------------------------- */
+
+.container {
+   -fx-padding: 2em 0 0 0;
+}
+
+.slot-list {
     -fx-padding: 1em;
     -fx-spacing: 0.5em;
 }
 
-.good,
-.good * {
+.number-input {
+    -fx-background-color: #333;
+    -fx-pref-width: 4em;
+}
+
+/* ------------------------ */
+/* ----- Highlighting ----- */
+/* ------------------------ */
+.text-green,
+.text-green * {
     -fx-text-fill: lightgreen;
 }
 
-.note,
-.note * {
+.text-orange,
+.text-orange * {
     -fx-text-fill: orange;
 }
 
-.warning,
-.warning * {
+.text-red,
+.text-red * {
     -fx-text-fill: #ff4444;
+}
+
+.tab-orange {
+    -fx-border-color: orange;
+}
+
+.tab-orange .tab-label {
+    -fx-text-fill: orange;
 }

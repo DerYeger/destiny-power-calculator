@@ -4,6 +4,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+const val GOOD = "text-green"
+const val NOTE = "text-orange"
+const val WARNING = "text-red"
+
+const val TAB_NOTE = "tab-orange"
+
 class Controller(private val model: Model) {
 
     init {
@@ -27,6 +33,7 @@ class Controller(private val model: Model) {
         updateMissingPower(character)
         updateSlotStates(character)
         updateInfo(character)
+        updateCharacterState(character)
         GlobalScope.launch(Dispatchers.IO) { model.save() }
     }
 
@@ -48,9 +55,9 @@ class Controller(private val model: Model) {
             slots.forEach {
                 it.state = when {
                     powerLevel - it.power >= missingPower -> {
-                        if (it.power == lowestPower) "warning" else "note"
+                        if (it.power == lowestPower) WARNING else NOTE
                     }
-                    it.power >= powerLevel -> "good"
+                    it.power >= powerLevel -> GOOD
                     else -> null
                 }
             }
@@ -60,8 +67,17 @@ class Controller(private val model: Model) {
     private fun updateInfo(character: Class) {
         with(character) {
             info = when {
-                slots.any { it.state in listOf("note", "warning") } -> "Tip: Upgrade any marked (orange or red) item"
+                slots.any { it.state in listOf(NOTE, WARNING) } -> "Tip: Upgrade any marked (orange or red) item"
                 missingPower > 4 -> "Tip: Don't use a powerful reward right now"
+                else -> null
+            }
+        }
+    }
+
+    private fun updateCharacterState(character: Class) {
+        with(character) {
+            state = when {
+                slots.any { it.state in listOf(NOTE, WARNING) } -> TAB_NOTE
                 else -> null
             }
         }

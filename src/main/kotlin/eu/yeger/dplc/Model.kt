@@ -28,6 +28,9 @@ class Class(val name: String, val armor: List<Slot>, val weapons: List<Slot>) {
     val infoProperty = SimpleStringProperty(null)
     var info: String? by infoProperty.delegation()
 
+    val stateProperty = SimpleStringProperty(null)
+    var state: String? by stateProperty.delegation()
+
     init {
         slots = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
     }
