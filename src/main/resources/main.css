@@ -11,17 +11,16 @@
 
 .tab-pane {
     -fx-alignment: center;
-    -fx-padding: 1em;
+    -fx-background-color: #222;
+    -fx-padding: 1em 2em;
 }
 
-.tab-pane,
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #222;
+    -fx-background-color: transparent;
 }
 
 .tab-pane .tab-header-area {
     -fx-alignment: center;
-    -fx-padding: 0 50 0 50;
 }
 
 .tab {
@@ -40,11 +39,16 @@
 /* ------------------------- */
 
 .container {
-   -fx-padding: 2em 0 0 0;
+    /*-fx-border-color: red;*/
+    -fx-padding: 2em 1em 0 1em;
+    -fx-spacing: 1em;
+}
+
+.container > HBox {
+    -fx-spacing: 2em;
 }
 
 .slot-list {
-    -fx-padding: 1em;
     -fx-spacing: 0.5em;
 }
 

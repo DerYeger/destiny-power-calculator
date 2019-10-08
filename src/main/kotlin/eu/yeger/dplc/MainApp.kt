@@ -11,6 +11,10 @@ import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import javafx.geometry.Insets
+import javafx.geometry.Side
+import javafx.scene.layout.StackPane
+
 
 class MainApp : Application() {
 
@@ -23,9 +27,13 @@ class MainApp : Application() {
             title = "Power Calculator"
             initStyle(StageStyle.UTILITY)
             sizeToScene()
+            show()
         }
 
-        stage.show()
+        (stage.scene.root as TabPane).apply {
+            centerTabs()
+            requestFocus()
+        }
     }
 
     private fun scene(model: Model) = scene {
@@ -51,6 +59,7 @@ class MainApp : Application() {
             styleClasses("container")
             child {
                 hBox {
+                    alignment = Pos.CENTER
                     children(
                         slots(weapons),
                         slots(armor),
@@ -89,6 +98,19 @@ class MainApp : Application() {
                 styleClasses("number-input")
             }
         }
+    }
+
+    private fun TabPane.centerTabs() {
+        side = Side.TOP
+        val region = lookup(".headers-region") as StackPane
+        val regionTop = lookup(".tab-pane:top *.tab-header-area") as StackPane
+        val insets = regionTop.padding
+        regionTop.padding = Insets(
+            insets.top,
+            insets.right,
+            insets.bottom,
+            regionTop.width / 2 - region.width / 2
+        )
     }
 }
 
