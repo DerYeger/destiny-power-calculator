@@ -16,13 +16,8 @@ class Slot(data: Pair<String, Int>) {
     var state: String? by stateProperty.delegation()
 }
 
-class Model {
-
-    private val gson = Gson()
-
+class Class(val armor: List<Slot>, weapons: List<Slot>) {
     val slots: List<Slot>
-    val weapons: List<Slot>
-    val armor: List<Slot>
 
     val powerLevelProperty = SimpleIntegerProperty()
     var powerLevel by powerLevelProperty.delegation()
@@ -34,13 +29,31 @@ class Model {
     var info: String? by infoProperty.delegation()
 
     init {
-        slots = gson.fromJson<List<Pair<String, Int>>>(PersistencyController.load()).map { Slot(it) } //statt liste von paaren -> listen von listen von paaren
-        weapons = slots.subList(0, 3)
-        armor = slots.subList(3, slots.size)
+        slots = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
+    }
+}
+
+class Model {
+
+    val weapons: List<Slot>
+
+    val hunter: Class
+    val titan: Class
+    val warlock: Class
+
+    init {
+        val slots = Gson().fromJson<List<List<Pair<String, Int>>>>(PersistencyController.load())
+            .map { it.map { slot -> Slot(slot) } }
+        weapons = slots[0]
+        hunter = Class(slots[1], weapons)
+        titan = Class(slots[2], weapons)
+        warlock = Class(slots[3], weapons)
     }
 
     fun save() {
-        val json = gson.toJson(slots.map { it.name to it.power })
+        val list =
+            listOf(weapons, hunter.armor, titan.armor, warlock.armor).map { it.map { slot -> slot.name to slot.power } }
+        val json = Gson().toJson(list)
         PersistencyController.save(json)
     }
 }

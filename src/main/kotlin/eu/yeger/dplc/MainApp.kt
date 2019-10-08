@@ -36,27 +36,27 @@ class MainApp : Application() {
                 isClosable = false
                 text = "Hunter"
                 content {
-                    buildTab()
+                    buildTab(model.hunter)
                 }
             }
             tab {
                 isClosable = false
                 text = "Titan"
                 content {
-                    buildTab()
+                    buildTab(model.titan)
                 }
             }
             tab {
                 isClosable = false
                 text = "Warlock"
                 content {
-                    buildTab()
+                    buildTab(model.warlock)
                 }
             }
         }
     }
 
-    private fun buildTab() = with(model) {
+    private fun buildTab(character: Class) = with(character) {
         vBox {
             alignment = Pos.CENTER
             styleClasses("container")
@@ -64,12 +64,8 @@ class MainApp : Application() {
             child {
                 hBox {
                     children(
-                        vBox {
-                            children(*(weapons.map { pair -> slot(pair) }.toTypedArray()))
-                        },
-                        vBox {
-                            children(*(armor.map { pair -> slot(pair) }.toTypedArray()))
-                        },
+                        slots(model.weapons),
+                        slots(armor),
                         vBox {
                             alignment = Pos.TOP_RIGHT
                             children(
@@ -87,6 +83,11 @@ class MainApp : Application() {
             }
         }
     }
+
+    private fun slots(slots: List<Slot>) =
+        vBox {
+            children(*(slots.map { slot(it) }.toTypedArray()))
+        }
 
     private fun slot(slot: Slot) =
         vBox {
@@ -122,6 +123,10 @@ fun tabPane(init: @FXMarker TabPane.() -> Unit) = Fragment {
 
 fun TabPane.tab(init: @FXMarker Tab.() -> Unit) {
     tabs += Tab().apply(init)
+}
+
+fun TabPane.tabs(blocks: List<@FXMarker Tab.() -> Unit>) {
+    blocks.map { tab(it) }
 }
 
 fun <T : Node> Tab.content(block: @FXMarker Child.() -> Fragment<T>) {
