@@ -1,5 +1,3 @@
-import edu.sc.seis.launch4j.tasks.Launch4jExternalTask
-
 plugins {
     java
     application
