@@ -1,91 +1,91 @@
 {
-  "weaponData": [
+  "weapons": [
     {
-      "first": "Kinetic",
-      "second": 750
+      "name": "Kinetic",
+      "power": 750
     },
     {
-      "first": "Energy",
-      "second": 750
+      "name": "Energy",
+      "power": 750
     },
     {
-      "first": "Heavy",
-      "second": 750
+      "name": "Heavy",
+      "power": 750
     }
   ],
   "characters": [
     {
       "name": "Hunter",
-      "armorData": [
+      "armor": [
         {
-          "first": "Helmet",
-          "second": 750
+          "name": "Helmet",
+          "power": 750
         },
         {
-          "first": "Gauntlets",
-          "second": 750
+          "name": "Gauntlets",
+          "power": 750
         },
         {
-          "first": "Chest",
-          "second": 750
+          "name": "Chest",
+          "power": 750
         },
         {
-          "first": "Legs",
-          "second": 750
+          "name": "Legs",
+          "power": 750
         },
         {
-          "first": "Class",
-          "second": 750
+          "name": "Class",
+          "power": 750
         }
       ]
     },
     {
       "name": "Titan",
-      "armorData": [
+      "armor": [
         {
-          "first": "Helmet",
-          "second": 750
+          "name": "Helmet",
+          "power": 750
         },
         {
-          "first": "Gauntlets",
-          "second": 750
+          "name": "Gauntlets",
+          "power": 750
         },
         {
-          "first": "Chest",
-          "second": 750
+          "name": "Chest",
+          "power": 750
         },
         {
-          "first": "Legs",
-          "second": 750
+          "name": "Legs",
+          "power": 750
         },
         {
-          "first": "Class",
-          "second": 750
+          "name": "Class",
+          "power": 750
         }
       ]
     },
     {
       "name": "Warlock",
-      "armorData": [
+      "armor": [
         {
-          "first": "Helmet",
-          "second": 750
+          "name": "Helmet",
+          "power": 750
         },
         {
-          "first": "Gauntlets",
-          "second": 750
+          "name": "Gauntlets",
+          "power": 750
         },
         {
-          "first": "Chest",
-          "second": 750
+          "name": "Chest",
+          "power": 750
         },
         {
-          "first": "Legs",
-          "second": 750
+          "name": "Legs",
+          "power": 750
         },
         {
-          "first": "Class",
-          "second": 750
+          "name": "Class",
+          "power": 750
         }
       ]
     }

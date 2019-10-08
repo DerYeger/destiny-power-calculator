@@ -64,7 +64,7 @@ tasks {
 
     create<Zip>("publish") {
         group = "distribution"
-        dependsOn(shadowJar, createExe)
+        dependsOn(createExe)
         archiveFileName.set("dpc.zip")
         from("src/java-runtime", "build/tmp/deploy/DestinyPowerCalculator.exe")
     }

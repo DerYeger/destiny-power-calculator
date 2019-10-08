@@ -5,22 +5,21 @@ import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 
-class Slot(data: Pair<String, Int>, val powerProperty: IntegerProperty = SimpleIntegerProperty(data.second)) {
-    constructor(slot: Slot) : this(slot.name to slot.power, slot.powerProperty)
+class Slot(data: SlotData, val powerProperty: IntegerProperty = SimpleIntegerProperty(data.power)) {
+    constructor(slot: Slot) : this(SlotData.fromSlot(slot), slot.powerProperty)
 
-    val name = data.first
+    val name = data.name
     var power by powerProperty.delegation()
 
     val stateProperty = SimpleStringProperty(null)
     var state: String? by stateProperty.delegation()
-
-    val data
-        get() = name to power
 }
 
-class Character(val name: String, armorData: List<Pair<String, Int>>, weaponData: List<Slot>) {
+class Character(characterData: CharacterData, weaponData: List<Slot>) {
+    val name = characterData.name
+
     val weapons = weaponData.map { Slot(it) }
-    val armor = armorData.map { Slot(it) }
+    val armor = characterData.armor.map { Slot(it) }
 
     val slots: List<Slot> = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
 
@@ -38,7 +37,7 @@ class Character(val name: String, armorData: List<Pair<String, Int>>, weaponData
 
 }
 
-class Model(saveData: SaveData) {
-    val weapons = saveData.weaponData.map { Slot(it) }
-    val characters: List<Character> = saveData.characters.map { Character(it.name, it.armorData, weapons) }
+class Model(modelData: ModelData) {
+    val weapons = modelData.weapons.map { Slot(it) }
+    val characters: List<Character> = modelData.characters.map { Character(it, weapons) }
 }

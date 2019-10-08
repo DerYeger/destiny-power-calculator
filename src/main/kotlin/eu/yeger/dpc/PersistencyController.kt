@@ -21,10 +21,10 @@ object PersistencyController {
     }
 
     fun save(model: Model) {
-        write(Gson().toJson(SaveData.fromModel(model)))
+        write(Gson().toJson(ModelData.fromModel(model)))
     }
 
-    fun load() = Gson().fromJson<SaveData>(String(file.readBytes()))
+    fun load() = Gson().fromJson<ModelData>(String(file.readBytes()))
 
     private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/defaults.json").readAllBytes())
 
@@ -37,13 +37,13 @@ object PersistencyController {
         this.fromJson<T>(json, object : TypeToken<T>() {}.type)
 }
 
-class SaveData(
-    val weaponData: List<Pair<String, Int>>,
+class ModelData(
+    val weapons: List<SlotData>,
     val characters: List<CharacterData>
 ) {
     companion object {
-        fun fromModel(model: Model) = SaveData(
-            model.weapons.map { it.data },
+        fun fromModel(model: Model) = ModelData(
+            model.weapons.map { SlotData.fromSlot(it) },
             model.characters.map { CharacterData.fromCharacter(it) }
         )
     }
@@ -51,12 +51,24 @@ class SaveData(
 
 class CharacterData(
     val name: String,
-    val armorData: List<Pair<String, Int>>
+    val armor: List<SlotData>
 ) {
     companion object {
         fun fromCharacter(character: Character) = CharacterData(
             character.name,
-            character.armor.map { it.data }
+            character.armor.map { SlotData.fromSlot(it) }
+        )
+    }
+}
+
+class SlotData(
+    val name: String,
+    val power: Int
+) {
+    companion object {
+        fun fromSlot(slot: Slot) = SlotData(
+            slot.name,
+            slot.power
         )
     }
 }
