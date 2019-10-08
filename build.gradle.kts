@@ -38,7 +38,7 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.8.6")
 
-    implementation("eu.yeger:kotlin.javafx:0.1.2")
+    implementation("eu.yeger:kofx:0.1.2")
 
     runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:win")
     runtimeOnly("org.openjfx:javafx-graphics:$javafx.version:linux")
