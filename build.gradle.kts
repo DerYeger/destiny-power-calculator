@@ -1,9 +1,12 @@
+import edu.sc.seis.launch4j.tasks.Launch4jExternalTask
+
 plugins {
     java
     application
     kotlin("jvm") version "1.3.50"
     id("org.openjfx.javafxplugin") version "0.0.8"
     id("com.github.johnrengelman.shadow") version "5.1.0"
+    id("edu.sc.seis.launch4j") version "2.4.6"
 }
 
 group = "eu.yeger"
@@ -58,15 +61,16 @@ tasks {
 
     shadowJar {
         archiveFileName.set("dpc.jar")
+        destinationDirectory.set(File("build/tmp/deploy"))
     }
 
     val deployCopy = create("deployCopy") {
         group = "distribution"
-        dependsOn(shadowJar)
+        dependsOn(shadowJar, createExe)
         doFirst {
             copy {
-                from("build/libs", "src/scripts")
-                into("build/tmp/deploy")
+                from("src/java-runtime")
+                into("build/tmp/deploy/runtime")
             }
         }
     }
@@ -76,5 +80,15 @@ tasks {
         dependsOn(deployCopy)
         archiveFileName.set("dpc.zip")
         from("build/tmp/deploy")
+    }
+
+    launch4j {
+        bundledJreAsFallback = false
+        bundledJrePath = "runtime"
+        jar = "dpc.jar"
+        jreMinVersion = javaVersion.toString()
+        mainClassName = application.mainClassName
+        outfile = "DestinyPowerCalculator.exe"
+        outputDir = "../build/tmp/deploy"
     }
 }
