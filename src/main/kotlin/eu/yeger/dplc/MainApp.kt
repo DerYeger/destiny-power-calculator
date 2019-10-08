@@ -14,8 +14,6 @@ import javafx.stage.StageStyle
 import javafx.geometry.Insets
 import javafx.geometry.Side
 import javafx.scene.layout.StackPane
-import java.lang.IllegalStateException
-
 
 class MainApp : Application() {
 
@@ -63,14 +61,14 @@ class MainApp : Application() {
                     alignment = Pos.CENTER
                     children(
                         slots(weapons),
-                        slots(armor),
                         vBox {
-                            alignment = Pos.TOP_RIGHT
+                            alignment = Pos.TOP_CENTER
                             children(
                                 label(powerLevelProperty.asString("%d Power")),
                                 label(missingPowerProperty.asString("%d points required"))
                             )
-                        }
+                        },
+                        slots(armor)
                     )
                 }
             }

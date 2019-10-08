@@ -17,7 +17,7 @@ class Slot(data: Pair<String, Int>) {
 }
 
 class Class(val name: String, val armor: List<Slot>, val weapons: List<Slot>) {
-    val slots: List<Slot>
+    val slots: List<Slot> = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
 
     val powerLevelProperty = SimpleIntegerProperty()
     var powerLevel by powerLevelProperty.delegation()
@@ -31,13 +31,9 @@ class Class(val name: String, val armor: List<Slot>, val weapons: List<Slot>) {
     val stateProperty = SimpleStringProperty(null)
     var state: String? by stateProperty.delegation()
 
-    init {
-        slots = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
-    }
 }
 
 class Model {
-
     val weapons: List<Slot>
 
     val hunter: Class

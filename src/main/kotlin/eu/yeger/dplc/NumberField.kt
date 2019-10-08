@@ -31,7 +31,7 @@ class NumberField : TextField() {
     }
 
     override fun replaceText(start: Int, end: Int, value: String?) {
-        if (value?.isNumeric == true) {
+        if (value?.isNumeric == true && start <= end) {
             super.replaceText(start, end, value)
         }
     }

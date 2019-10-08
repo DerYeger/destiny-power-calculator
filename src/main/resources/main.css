@@ -40,7 +40,6 @@
 /* ------------------------- */
 
 .container {
-    /*-fx-border-color: red;*/
     -fx-padding: 2em 1em 0 1em;
     -fx-spacing: 1em;
 }
@@ -61,6 +60,7 @@
 /* ------------------------ */
 /* ----- Highlighting ----- */
 /* ------------------------ */
+
 .text-green,
 .text-green * {
     -fx-text-fill: lightgreen;
