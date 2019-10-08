@@ -61,13 +61,7 @@ class MainApp : Application() {
                     alignment = Pos.CENTER
                     children(
                         slots(weapons),
-                        vBox {
-                            alignment = Pos.TOP_CENTER
-                            children(
-                                label(powerLevelProperty.asString("%d Power")),
-                                label(missingPowerProperty.asString("%d points required"))
-                            )
-                        },
+                        characterInfo(character),
                         slots(armor)
                     )
                 }
@@ -97,6 +91,14 @@ class MainApp : Application() {
                 styleClasses("number-input")
             }
         }
+    }
+
+    private fun characterInfo(character: Class) = vBox {
+        alignment = Pos.TOP_CENTER
+        children(
+            label(character.powerLevelProperty.asString("%d Power")),
+            label(character.missingPowerProperty.asString("%d points required"))
+        )
     }
 
     private fun TabPane.centerTabs() {
