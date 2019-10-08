@@ -34,7 +34,6 @@ class Character(characterData: CharacterData, weaponData: List<Slot>) {
 
     val stateProperty = SimpleStringProperty(null)
     var state: String? by stateProperty.delegation()
-
 }
 
 class Model(modelData: ModelData) {
