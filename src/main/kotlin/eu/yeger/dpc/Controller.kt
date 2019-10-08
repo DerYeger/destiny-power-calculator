@@ -1,4 +1,4 @@
-package eu.yeger.dplc
+package eu.yeger.dpc
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

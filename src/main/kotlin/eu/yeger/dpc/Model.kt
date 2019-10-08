@@ -1,4 +1,4 @@
-package eu.yeger.dplc
+package eu.yeger.dpc
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

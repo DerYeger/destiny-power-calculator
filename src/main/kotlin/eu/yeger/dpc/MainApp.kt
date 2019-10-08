@@ -1,4 +1,4 @@
-package eu.yeger.dplc
+package eu.yeger.dpc
 
 import eu.yeger.kotlin.javafx.*
 import javafx.application.Application
@@ -23,7 +23,7 @@ class MainApp : Application() {
         stage.apply {
             isAlwaysOnTop = true
             isResizable = false
-            title = "Power Calculator"
+            title = "Destiny Power Calculator"
             initStyle(StageStyle.UTILITY)
             sizeToScene()
             show()

@@ -1,10 +1,10 @@
-package eu.yeger.dplc
+package eu.yeger.dpc
 
 import java.io.File
 
 object PersistencyController {
 
-    private val file = File("${getAppDirectory()}/Yeger/DPLC", "save.json")
+    private val file = File("${getAppDirectory()}/Yeger/DPC", "save.json")
 
     init {
         if (!file.exists()) {

@@ -1,4 +1,4 @@
-package eu.yeger.dplc
+package eu.yeger.dpc
 
 import eu.yeger.kotlin.javafx.delegation
 import javafx.beans.binding.Bindings

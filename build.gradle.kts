@@ -10,7 +10,7 @@ group = "eu.yeger"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClassName = "eu.yeger.dplc.AppLauncher"
+    mainClassName = "eu.yeger.dpc.AppLauncher"
 }
 
 val javaVersion = JavaVersion.VERSION_12
@@ -57,7 +57,7 @@ tasks {
     }
 
     shadowJar {
-        archiveFileName.set("dplc.jar")
+        archiveFileName.set("dpc.jar")
     }
 
     val deployCopy = create("deployCopy") {
@@ -74,7 +74,7 @@ tasks {
     create<Zip>("deployZip") {
         group = "distribution"
         dependsOn(deployCopy)
-        archiveFileName.set("dplc.zip")
+        archiveFileName.set("dpc.zip")
         from("build/tmp/deploy")
     }
 }

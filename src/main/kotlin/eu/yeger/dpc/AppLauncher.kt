@@ -1,4 +1,4 @@
-package eu.yeger.dplc
+package eu.yeger.dpc
 
 import javafx.application.Application
 
