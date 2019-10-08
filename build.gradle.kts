@@ -64,22 +64,11 @@ tasks {
         destinationDirectory.set(File("build/tmp/deploy"))
     }
 
-    val deployCopy = create("deployCopy") {
+    create<Zip>("publish") {
         group = "distribution"
         dependsOn(shadowJar, createExe)
-        doFirst {
-            copy {
-                from("src/java-runtime")
-                into("build/tmp/deploy/runtime")
-            }
-        }
-    }
-
-    create<Zip>("deployZip") {
-        group = "distribution"
-        dependsOn(deployCopy)
         archiveFileName.set("dpc.zip")
-        from("build/tmp/deploy")
+        from("src/java-runtime", "build/tmp/deploy/DestinyPowerCalculator.exe")
     }
 
     launch4j {
