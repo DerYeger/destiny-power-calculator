@@ -14,49 +14,35 @@ import javafx.stage.StageStyle
 
 class MainApp : Application() {
 
-    private val model = Model()
-
-    private val controller = Controller(model)
-
-    override fun start(primaryStage: Stage) {
-        primaryStage.scene = buildScene()
-        primaryStage.apply {
+    override fun start(stage: Stage) {
+        val model = Model()
+        val controller = Controller(model)
+        stage.scene = scene(model)
+        stage.apply {
+            isAlwaysOnTop = true
+            isResizable = false
             title = "Power Calculator"
             initStyle(StageStyle.UTILITY)
-            isAlwaysOnTop = true
             sizeToScene()
-            isResizable = false
             show()
         }
     }
 
-    private fun buildScene() = scene {
+    private fun scene(model: Model) = scene {
         tabPane {
-            tab {
-                isClosable = false
-                text = "Hunter"
-                content {
-                    buildTab(model.hunter)
-                }
-            }
-            tab {
-                isClosable = false
-                text = "Titan"
-                content {
-                    buildTab(model.titan)
-                }
-            }
-            tab {
-                isClosable = false
-                text = "Warlock"
-                content {
-                    buildTab(model.warlock)
-                }
-            }
+            tabs(model.classes.map { tab(it) })
         }
     }
 
-    private fun buildTab(character: Class) = with(character) {
+    private fun tab(character: Class): Tab.() -> Unit = {
+        isClosable = false
+        text = character.name
+        content {
+            tabContent(character)
+        }
+    }
+
+    private fun tabContent(character: Class) = with(character) {
         vBox {
             alignment = Pos.CENTER
             styleClasses("container")
@@ -64,7 +50,7 @@ class MainApp : Application() {
             child {
                 hBox {
                     children(
-                        slots(model.weapons),
+                        slots(weapons),
                         slots(armor),
                         vBox {
                             alignment = Pos.TOP_RIGHT
@@ -89,17 +75,16 @@ class MainApp : Application() {
             children(*(slots.map { slot(it) }.toTypedArray()))
         }
 
-    private fun slot(slot: Slot) =
-        vBox {
-            alignment = Pos.CENTER
-            bindStyleClass(slot.stateProperty)
-            child { label(slot.name) }
-            child {
-                numberField(slot.powerProperty) {
-                    alignment = Pos.CENTER
-                }
+    private fun slot(slot: Slot) = vBox {
+        alignment = Pos.CENTER
+        bindStyleClass(slot.stateProperty)
+        child { label(slot.name) }
+        child {
+            numberField(slot.powerProperty) {
+                alignment = Pos.CENTER
             }
         }
+    }
 }
 
 fun Parent.bindStyleClass(observable: ObservableValue<String?>) {

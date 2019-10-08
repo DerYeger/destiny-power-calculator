@@ -16,7 +16,7 @@ class Slot(data: Pair<String, Int>) {
     var state: String? by stateProperty.delegation()
 }
 
-class Class(val armor: List<Slot>, weapons: List<Slot>) {
+class Class(val name: String, val armor: List<Slot>, val weapons: List<Slot>) {
     val slots: List<Slot>
 
     val powerLevelProperty = SimpleIntegerProperty()
@@ -41,13 +41,17 @@ class Model {
     val titan: Class
     val warlock: Class
 
+    val classes: List<Class>
+
     init {
         val slots = Gson().fromJson<List<List<Pair<String, Int>>>>(PersistencyController.load())
             .map { it.map { slot -> Slot(slot) } }
         weapons = slots[0]
-        hunter = Class(slots[1], weapons)
-        titan = Class(slots[2], weapons)
-        warlock = Class(slots[3], weapons)
+        hunter = Class("Hunter", slots[1], weapons)
+        titan = Class("Titan", slots[2], weapons)
+        warlock = Class("Warlock", slots[3], weapons)
+
+        classes = listOf(hunter, titan, warlock)
     }
 
     fun save() {
