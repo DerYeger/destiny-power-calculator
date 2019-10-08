@@ -15,37 +15,39 @@ class Controller(private val model: Model) {
     init {
         with(model) {
             weapons.forEach { it.powerProperty.addListener { _, _, _ -> updateAll() } }
-            hunter.armor.forEach { it.powerProperty.addListener { _, _, _ -> update(hunter) } }
-            titan.armor.forEach { it.powerProperty.addListener { _, _, _ -> update(titan) } }
-            warlock.armor.forEach { it.powerProperty.addListener { _, _, _ -> update(warlock) } }
+            characters.forEach { character ->
+                character.armor.forEach {
+                    it.powerProperty.addListener { _, _, _ -> update(character) }
+                }
+            }
         }
-        updateAll()
+        updateAll(save = false)
     }
 
-    private fun updateAll() {
-        with(model) {
-            listOf(hunter, titan, warlock).forEach { update(it) }
-        }
+    private fun updateAll(save: Boolean = true) {
+        model.characters.forEach { update(it, save = save) }
     }
 
-    private fun update(character: Character) {
+    private fun update(character: Character, save: Boolean = true) {
         updatePowerLevel(character)
         updateMissingPower(character)
         updateSlotStates(character)
         updateInfo(character)
         updateCharacterState(character)
-        GlobalScope.launch(Dispatchers.IO) { model.save() }
+        if (save) {
+            GlobalScope.launch(Dispatchers.IO) { PersistencyController.save(model) }
+        }
     }
 
     private fun updatePowerLevel(character: Character) {
         with(character) {
-            powerLevel = slots.map { it.power }.average().toInt()
+            power = slots.map { it.power }.average().toInt()
         }
     }
 
     private fun updateMissingPower(character: Character) {
         with(character) {
-            missingPower = (powerLevel + 1) * slots.size - slots.sumBy { it.power }
+            missingPower = (power + 1) * slots.size - slots.sumBy { it.power }
         }
     }
 
@@ -54,10 +56,10 @@ class Controller(private val model: Model) {
             val lowestPower = slots.map { it.power }.min() ?: -1
             slots.forEach {
                 it.state = when {
-                    powerLevel - it.power >= missingPower -> {
+                    power - it.power >= missingPower -> {
                         if (it.power == lowestPower) WARNING else NOTE
                     }
-                    it.power >= powerLevel -> GOOD
+                    it.power >= power -> GOOD
                     else -> null
                 }
             }

@@ -1,5 +1,7 @@
 package eu.yeger.dpc
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.File
 
 object PersistencyController {
@@ -10,20 +12,51 @@ object PersistencyController {
         if (!file.exists()) {
             file.parentFile.mkdirs()
             file.createNewFile()
-            save(loadDefaults())
+            write(loadDefaults())
         }
     }
 
-    fun save(json: String) {
+    private fun write(json: String) {
         file.writeText(json, Charsets.UTF_8)
     }
 
-    fun load() = String(file.readBytes())
+    fun save(model: Model) {
+        write(Gson().toJson(SaveData.fromModel(model)))
+    }
+
+    fun load() = Gson().fromJson<SaveData>(String(file.readBytes()))
 
     private fun loadDefaults() = String(this.javaClass.getResourceAsStream("/defaults.json").readAllBytes())
 
     private fun getAppDirectory() = when {
         System.getProperty("os.name").contains("Win") -> System.getenv("AppData")
         else -> File(PersistencyController::class.java.protectionDomain.codeSource.location.toURI()).parentFile.absolutePath
+    }
+
+    private inline fun <reified T> Gson.fromJson(json: String): T =
+        this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+}
+
+class SaveData(
+    val weaponData: List<Pair<String, Int>>,
+    val characters: List<CharacterData>
+) {
+    companion object {
+        fun fromModel(model: Model) = SaveData(
+            model.weapons.map { it.data },
+            model.characters.map { CharacterData.fromCharacter(it) }
+        )
+    }
+}
+
+class CharacterData(
+    val name: String,
+    val armorData: List<Pair<String, Int>>
+) {
+    companion object {
+        fun fromCharacter(character: Character) = CharacterData(
+            character.name,
+            character.armor.map { it.data }
+        )
     }
 }

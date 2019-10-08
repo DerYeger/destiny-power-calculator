@@ -18,7 +18,7 @@ import javafx.scene.layout.StackPane
 class MainApp : Application() {
 
     override fun start(stage: Stage) {
-        val model = Model().also { Controller(it) }
+        val model = Model(PersistencyController.load()).also { Controller(it) }
         stage.scene = scene(model)
         stage.apply {
             isAlwaysOnTop = true
@@ -96,7 +96,7 @@ class MainApp : Application() {
     private fun characterInfo(character: Character) = vBox {
         alignment = Pos.TOP_CENTER
         children(
-            label(character.powerLevelProperty.asString("%d Power")),
+            label(character.powerProperty.asString("%d Power")),
             label(character.missingPowerProperty.asString("%d points required"))
         )
     }
