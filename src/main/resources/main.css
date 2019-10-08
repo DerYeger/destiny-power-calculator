@@ -28,6 +28,7 @@
     -fx-border-color: #ddd;
     -fx-border-width: 0;
     -fx-focus-traversable: false;
+    -fx-padding: 0 1.5em;
 }
 
 .tab:selected {
