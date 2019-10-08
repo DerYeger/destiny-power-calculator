@@ -39,11 +39,11 @@ class MainApp : Application() {
         tabPane {
             tabMinWidth = 80.0
             styleSheets("main.css")
-            tabs(model.classes.map { tab(it) })
+            tabs(model.characters.map { tab(it) })
         }
     }
 
-    private fun tab(character: Class): Tab.() -> Unit = {
+    private fun tab(character: Character): Tab.() -> Unit = {
         isClosable = false
         text = character.name
         bindStyleClass(character.stateProperty)
@@ -52,7 +52,7 @@ class MainApp : Application() {
         }
     }
 
-    private fun tabContent(character: Class) = with(character) {
+    private fun tabContent(character: Character) = with(character) {
         vBox {
             alignment = Pos.CENTER
             styleClasses("container")
@@ -93,7 +93,7 @@ class MainApp : Application() {
         }
     }
 
-    private fun characterInfo(character: Class) = vBox {
+    private fun characterInfo(character: Character) = vBox {
         alignment = Pos.TOP_CENTER
         children(
             label(character.powerLevelProperty.asString("%d Power")),

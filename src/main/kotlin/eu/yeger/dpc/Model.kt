@@ -3,20 +3,23 @@ package eu.yeger.dpc
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import eu.yeger.kotlin.javafx.delegation
+import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 
-class Slot(data: Pair<String, Int>) {
-    val name = data.first
+class Slot(data: Pair<String, Int>, val powerProperty: IntegerProperty = SimpleIntegerProperty(data.second)) {
 
-    val powerProperty = SimpleIntegerProperty(data.second)
+    constructor(slot: Slot) : this(slot.name to slot.power, slot.powerProperty)
+
+    val name = data.first
     var power by powerProperty.delegation()
 
     val stateProperty = SimpleStringProperty(null)
     var state: String? by stateProperty.delegation()
 }
 
-class Class(val name: String, val armor: List<Slot>, val weapons: List<Slot>) {
+class Character(val name: String, val armor: List<Slot>, weaponData: List<Slot>) {
+    val weapons = weaponData.map { Slot(it) }
     val slots: List<Slot> = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
 
     val powerLevelProperty = SimpleIntegerProperty()
@@ -36,21 +39,21 @@ class Class(val name: String, val armor: List<Slot>, val weapons: List<Slot>) {
 class Model {
     val weapons: List<Slot>
 
-    val hunter: Class
-    val titan: Class
-    val warlock: Class
+    val hunter: Character
+    val titan: Character
+    val warlock: Character
 
-    val classes: List<Class>
+    val characters: List<Character>
 
     init {
         val slots = Gson().fromJson<List<List<Pair<String, Int>>>>(PersistencyController.load())
             .map { it.map { slot -> Slot(slot) } }
         weapons = slots[0]
-        hunter = Class("Hunter", slots[1], weapons)
-        titan = Class("Titan", slots[2], weapons)
-        warlock = Class("Warlock", slots[3], weapons)
+        hunter = Character("Hunter", slots[1], weapons)
+        titan = Character("Titan", slots[2], weapons)
+        warlock = Character("Warlock", slots[3], weapons)
 
-        classes = listOf(hunter, titan, warlock)
+        characters = listOf(hunter, titan, warlock)
     }
 
     fun save() {

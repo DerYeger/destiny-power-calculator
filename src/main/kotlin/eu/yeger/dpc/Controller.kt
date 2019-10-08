@@ -28,7 +28,7 @@ class Controller(private val model: Model) {
         }
     }
 
-    private fun update(character: Class) {
+    private fun update(character: Character) {
         updatePowerLevel(character)
         updateMissingPower(character)
         updateSlotStates(character)
@@ -37,19 +37,19 @@ class Controller(private val model: Model) {
         GlobalScope.launch(Dispatchers.IO) { model.save() }
     }
 
-    private fun updatePowerLevel(character: Class) {
+    private fun updatePowerLevel(character: Character) {
         with(character) {
             powerLevel = slots.map { it.power }.average().toInt()
         }
     }
 
-    private fun updateMissingPower(character: Class) {
+    private fun updateMissingPower(character: Character) {
         with(character) {
             missingPower = (powerLevel + 1) * slots.size - slots.sumBy { it.power }
         }
     }
 
-    private fun updateSlotStates(character: Class) {
+    private fun updateSlotStates(character: Character) {
         with(character) {
             val lowestPower = slots.map { it.power }.min() ?: -1
             slots.forEach {
@@ -64,17 +64,17 @@ class Controller(private val model: Model) {
         }
     }
 
-    private fun updateInfo(character: Class) {
+    private fun updateInfo(character: Character) {
         with(character) {
             info = when {
-                slots.any { it.state in listOf(NOTE, WARNING) } -> "Tip: Upgrade any marked (orange or red) item"
+                slots.any { it.state in listOf(NOTE, WARNING) } -> "Tip: Upgrade any orange or red item"
                 missingPower > 4 -> "Tip: Don't use a powerful reward right now"
                 else -> null
             }
         }
     }
 
-    private fun updateCharacterState(character: Class) {
+    private fun updateCharacterState(character: Character) {
         with(character) {
             state = when {
                 slots.any { it.state in listOf(NOTE, WARNING) } -> TAB_NOTE
