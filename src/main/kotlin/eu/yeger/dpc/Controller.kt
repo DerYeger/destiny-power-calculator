@@ -12,12 +12,25 @@ const val TAB_NOTE = "tab-orange"
 
 class Controller(private val model: Model) {
 
+    //prevent eager gc of listeners
+    private val listeners = ArrayList<Any>()
+
     init {
         with(model) {
-            weapons.forEach { it.powerProperty.addListener { _, _, _ -> updateAll() } }
+            weapons.forEach {
+                val listener = { _: Any, _: Any, _: Any ->
+                    updateAll()
+                }
+                listeners.add(listener)
+                it.powerProperty.addListener(listener)
+            }
             characters.forEach { character ->
+                val listener = { _: Any, _: Any, _: Any ->
+                    update(character)
+                }
+                listeners.add(listener)
                 character.armor.forEach {
-                    it.powerProperty.addListener { _, _, _ -> update(character) }
+                    it.powerProperty.addListener(listener)
                 }
             }
         }
