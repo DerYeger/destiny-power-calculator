@@ -1,19 +1,16 @@
 package eu.yeger.dpc
 
-import eu.yeger.kotlin.javafx.*
+import eu.yeger.kofx.bindStyleClass
+import eu.yeger.kofx.fragment.*
+import eu.yeger.kofx.scene
+import eu.yeger.kofx.styleClasses
+import eu.yeger.kofx.styleSheets
 import javafx.application.Application
-import javafx.beans.property.IntegerProperty
-import javafx.beans.value.ObservableValue
-import javafx.css.Styleable
 import javafx.geometry.Pos
-import javafx.scene.Node
 import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import javafx.geometry.Insets
-import javafx.geometry.Side
-import javafx.scene.layout.StackPane
 
 class MainApp : Application() {
 
@@ -100,60 +97,4 @@ class MainApp : Application() {
             label(character.missingPowerProperty.asString("%d points required"))
         )
     }
-
-    private fun TabPane.centerTabs() {
-        val region = lookup(".headers-region") as StackPane
-        val regionTop = when (side!!) {
-            Side.TOP -> lookup(".tab-pane:top *.tab-header-area")
-            Side.RIGHT -> lookup(".tab-pane:right *.tab-header-area")
-            Side.BOTTOM -> lookup(".tab-pane:bottom *.tab-header-area")
-            Side.LEFT -> lookup(".tab-pane:left *.tab-header-area")
-        } as StackPane
-        val insets = regionTop.padding
-        regionTop.padding = when (side!!) {
-            Side.TOP, Side.BOTTOM -> Insets(
-                insets.top,
-                insets.right,
-                insets.bottom,
-                regionTop.width / 2 - region.width / 2
-            )
-            Side.LEFT, Side.RIGHT -> Insets(
-                regionTop.height / 2 - region.height / 2,
-                insets.right,
-                insets.bottom,
-                insets.left
-            )
-        }
-    }
-}
-
-fun Styleable.bindStyleClass(observable: ObservableValue<String?>) {
-    observable.value?.let { styleClass.add(it) }
-    observable.addListener { _, oldValue, newValue ->
-        styleClass.remove(oldValue)
-        newValue?.let { styleClass.add(it) }
-    }
-}
-
-fun numberField(observable: IntegerProperty, init: @FXMarker NumberField.() -> Unit) = Fragment {
-    NumberField().apply {
-        valueProperty.bindBidirectional(observable)
-        init()
-    }
-}
-
-fun tabPane(init: @FXMarker TabPane.() -> Unit) = Fragment {
-    TabPane().apply(init)
-}
-
-fun TabPane.tab(init: @FXMarker Tab.() -> Unit) {
-    tabs += Tab().apply(init)
-}
-
-fun TabPane.tabs(blocks: List<@FXMarker Tab.() -> Unit>) {
-    blocks.map { tab(it) }
-}
-
-fun <T : Node> Tab.content(block: @FXMarker Child.() -> Fragment<T>) {
-    content = block(Child).instance()
 }

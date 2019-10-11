@@ -1,18 +1,18 @@
 package eu.yeger.dpc
 
-import eu.yeger.kotlin.javafx.delegation
+import eu.yeger.kofx.property.delegate
+import eu.yeger.kofx.property.integerProperty
+import eu.yeger.kofx.property.stringProperty
 import javafx.beans.property.IntegerProperty
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.property.SimpleStringProperty
 
-class Slot(data: SlotData, val powerProperty: IntegerProperty = SimpleIntegerProperty(data.power)) {
+class Slot(data: SlotData, val powerProperty: IntegerProperty = integerProperty(data.power)) {
     constructor(slot: Slot) : this(SlotData.fromSlot(slot), slot.powerProperty)
 
     val name = data.name
-    var power by powerProperty.delegation()
+    var power by powerProperty.delegate()
 
-    val stateProperty = SimpleStringProperty(null)
-    var state: String? by stateProperty.delegation()
+    val stateProperty = stringProperty(null)
+    var state: String? by stateProperty.delegate()
 }
 
 class Character(characterData: CharacterData, weaponData: List<Slot>) {
@@ -23,17 +23,17 @@ class Character(characterData: CharacterData, weaponData: List<Slot>) {
 
     val slots: List<Slot> = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
 
-    val powerProperty = SimpleIntegerProperty()
-    var power by powerProperty.delegation()
+    val powerProperty = integerProperty(0)
+    var power by powerProperty.delegate()
 
-    val missingPowerProperty = SimpleIntegerProperty()
-    var missingPower by missingPowerProperty.delegation()
+    val missingPowerProperty = integerProperty(0)
+    var missingPower by missingPowerProperty.delegate()
 
-    val infoProperty = SimpleStringProperty(null)
-    var info: String? by infoProperty.delegation()
+    val infoProperty = stringProperty(null)
+    var info: String? by infoProperty.delegate()
 
-    val stateProperty = SimpleStringProperty(null)
-    var state: String? by stateProperty.delegation()
+    val stateProperty = stringProperty(null)
+    var state: String? by stateProperty.delegate()
 }
 
 class Model(modelData: ModelData) {
