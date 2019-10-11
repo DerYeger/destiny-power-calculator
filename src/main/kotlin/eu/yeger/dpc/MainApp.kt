@@ -82,7 +82,7 @@ class MainApp : Application() {
         bindStyleClass(slot.stateProperty)
         child { label(slot.name) }
         child {
-            numberField(slot.powerProperty) {
+            integerField(slot.powerProperty) {
                 alignment = Pos.CENTER
                 maxValue = 9999
                 styleClasses("number-input")

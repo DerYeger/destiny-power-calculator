@@ -1,18 +1,17 @@
 package eu.yeger.dpc
 
-import eu.yeger.kofx.property.delegate
+import eu.yeger.kofx.property.IntegerPropertyDelegate
 import eu.yeger.kofx.property.integerProperty
 import eu.yeger.kofx.property.stringProperty
-import javafx.beans.property.IntegerProperty
 
-class Slot(data: SlotData, val powerProperty: IntegerProperty = integerProperty(data.power)) {
+class Slot(data: SlotData, val powerProperty: IntegerPropertyDelegate = integerProperty(data.power)) {
     constructor(slot: Slot) : this(SlotData.fromSlot(slot), slot.powerProperty)
 
     val name = data.name
-    var power by powerProperty.delegate()
+    var power by powerProperty
 
     val stateProperty = stringProperty(null)
-    var state: String? by stateProperty.delegate()
+    var state: String? by stateProperty
 }
 
 class Character(characterData: CharacterData, weaponData: List<Slot>) {
@@ -24,16 +23,16 @@ class Character(characterData: CharacterData, weaponData: List<Slot>) {
     val slots: List<Slot> = listOf(*weapons.toTypedArray(), *armor.toTypedArray())
 
     val powerProperty = integerProperty(0)
-    var power by powerProperty.delegate()
+    var power by powerProperty
 
     val missingPowerProperty = integerProperty(0)
-    var missingPower by missingPowerProperty.delegate()
+    var missingPower by missingPowerProperty
 
     val infoProperty = stringProperty(null)
-    var info: String? by infoProperty.delegate()
+    var info: String? by infoProperty
 
     val stateProperty = stringProperty(null)
-    var state: String? by stateProperty.delegate()
+    var state: String? by stateProperty
 }
 
 class Model(modelData: ModelData) {
