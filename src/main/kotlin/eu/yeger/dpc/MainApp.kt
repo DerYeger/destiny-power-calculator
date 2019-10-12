@@ -1,10 +1,9 @@
 package eu.yeger.dpc
 
-import eu.yeger.kofx.bindStyleClass
+import eu.yeger.kofx.extension.bindStyleClass
+import eu.yeger.kofx.extension.styleClasses
+import eu.yeger.kofx.extension.styleSheets
 import eu.yeger.kofx.fragment.*
-import eu.yeger.kofx.scene
-import eu.yeger.kofx.styleClasses
-import eu.yeger.kofx.styleSheets
 import javafx.application.Application
 import javafx.geometry.Pos
 import javafx.scene.control.Tab
@@ -74,7 +73,7 @@ class MainApp : Application() {
     private fun slots(slots: List<Slot>) =
         vBox {
             styleClasses("slot-list")
-            children(*(slots.map { slot(it) }.toTypedArray()))
+            children(*slots.map { slot(it) }.toTypedArray())
         }
 
     private fun slot(slot: Slot) = vBox {
